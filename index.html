@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>The (Markov) Hidden Connection</title>
+    <title>Stage-Structure Population Growth and TDF Restoration</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/black.css">
@@ -27,129 +27,132 @@
   <body>
     <div class="reveal">
       <div class="slides">
-	  <section data-background-image="img/neurons.gif" data-background-opacity=".4">
-	    <h4>The (Markov) Hidden Connection: Quantifying Neuronal Spikes and Forest Fires</h4>
-	    <small>by Fabiana Ferracina and Jacob Pennington (WSU Vancouver)</small>
+	  <section data-background-image="img/agaveharvest.jpeg" data-background-opacity=".3">
+	    <h4>Demographic analysis of <i>Agave angustifolia</i> with an emphasis on ecological restoration</h4>
+	    <small>(<i>a student-lead discussion by Fabiana Ferracina</i>)</small>
 	  </section>
-	  <section data-background-image="img/forest-fire.gif" data-background-opacity=".3">
-	  <h4>The Hidden Connection: What we will cover</h4>
-	  <ul>
-	    <li class="fragment">Review</li>
-	    <li class="fragment">Network Model</li>
-	    <li class="fragment">$\alpha$'s, $\beta$'s, MSE's and Results</li>
-	    <li class="fragment">Importance</li>
-	  </ul>
+	  <section data-background-image="img/unam.jpeg" data-background-opacity=".2">
+	    <h4>The Authors</h4>
+	    <section data-transition="fade-in">
+	    <p class="fragment">Luis Arias Medellin<br>
+	      <img src="img/luis.jpg" width="300px"><br>
+	    PhD student at the University of Toronto. His current project focuses of the effects of habitat loss and fragmentation on <i>Heliconia tortuosa</i> population.</p>
+	    </section>
+	    <section data-transition="fade-in">
+	      <p>Dr. Consuelo Bonfil (<a href="https://scholar.google.com/citations?user=FeuKD5wAAAAJ&hl=en&oi=ao" target="_blank">Google Scholar</a>)<br>
+		<img src="img/bonfil.jpg" width="300px"><br>
+		Researcher at Universidad Nacional Autónoma de México focusing on restoration ecology of forests and their sustainable management, especially temperate and tropical dry forests.
+	    </p>
+	    </section>
+	    <section data-transition="fade-in">
+	      <p>Dr. Teresa Valverde (<a href="https://scholar.google.com/citations?user=Vz1lh90AAAAJ&hl=en&oi=ao" target="_blank">Google Scholar</a>)<br>
+	      <img src="img/teresa.jpeg" width="300px"><br>
+	    Researcher at Universidad Nacional Autónoma de México focusing on population ecology of plant species, especially using demographic tecniques.</p>
+	    </section>
 	  </section>
-	  <section>
-	<section>
-	  <h4>Previously in Hidden Connections</h4>
-	  <p>Inspired by the idea that one can relate forest fires to neuronal spikes.</p>
+	<section data-background-image="img/tdf.jpg" data-background-opacity=".2">
+	  <h4>Motivation</h4>
 	  <ul>
-	    <li class="fragment">DTMC with three states: active, refractory, quiescent.</li>
-	    <li class="fragment">HMM with observed thermal readings labeled fire or no fire.</li>
-	    <li class="fragment">We have a transition prob. matrix $P$, a observed$\rightarrow$state prob. matrix $B$ and an initial state vector $\pi$.</li>
-	    <li class="fragment">We wish to find the model $\lambda = (P, B, \pi)$ that maximizes the likelihood of the given observation sequence.</li>
-	  </ul>
+	    <li class="fragment">Tropical dry forests (TDF) are disappearing.</li>
+	    <li class="fragment">Concerned ecologist are investigating ways to undo the damage via restoration.</li>
+	    <li class="fragment">Native species can jump-start ecological succession of disturbed areas and aid in ecosystem function recovery.</li>
+	    <li class="fragment"><i>Agave Angustifolia</i> is a TDF native species. We must understand its establishment, survival and growth to  determine if appropriate for restoration.</li>
+	    </ul>
 	</section>
-	<section data-background-image="img/data.jpeg" data-background-opacity=".2">
-	  <h4>The Data</h4>
-	  <ul>
-	    <li class="fragment">NASA's satellites Aqua and Terra payload MODIS, as before.</li>
-	    <li class="fragment">Lower spatial resolution than before: 1 km$^2$ per pixel.</li>
-	    <li class="fragment">But we get more frequent images! 1 for each day of the year.</li>
-	    <li class="fragment">The place is still the Western Amazon. Two data sets: 2010 and 2019.</li>
-	  </ul>
-	</section>
-		<section data-background-image="img/data.jpeg" data-background-opacity=".2" data-transition="fade-in">
-	  <h4>The Data</h4>
-	  <img src="img/bolivia2010.gif" width="300px">
-	  <p>The higher temporal resolution makes the data is too sparse. Thus we decreased it to 5 days per time step. We also decreased the spatial to 10 km$^2/$pixel.</p>
-	  </section>
-	  </section>
 	  <section>
-	  <section>
-	    <h4>The Network Model</h4>
-	    <p></p>
-	    <img src="img/model1.jpg" width="500px">
-	  </section>
-	  <section data-transition="fade-in">
-	      <h4>A Network of HMMs</h4>
-	       <p>Each node in the network is an HMM like decribed before.</p>
-	    <img src="img/model1.jpg" width="350px">&nbsp;<img src="img/hmm.png" width="458px">
-	  </section>
-	   <section data-transition="fade-in">
-	      <h4>How Transitions Work</h4>
-	       <p>As an example consider a node $C$ with transition probabilities matrix $P_0$ at time $t=0$.</p>
-	       <div><img src="img/model.jpg" width="450px">
-	       <small><i>(multipliers for $[a \rightarrow a]$ and $[q \rightarrow a]$ are 1.2 and 2.0, respectively.)</i></small></div>
-	      <p>If $C$ is adjacent to two active nodes at $t=0$, then at $t=1$ its transition probalities matrix becomes $P_1$.</p>
-	    </section>
-	  </section>
-	  <section>
-	     <section>
-	      <h4>HMM Implementation: Same as Before</h4>
-	      <p>Initial Pre-chosen Values:</p>
-	      $$\pi = \begin{pmatrix}0.005\\0.005\\0.990\end{pmatrix},
-	      \ P = \begin{pmatrix}0.50 & 0.01 & 0.09\\0.25 & 0.90 & 0.01\\0.25 & 0.09 & 0.90\end{pmatrix},$$
-	      <br>
-	      $$B = \begin{pmatrix}0.1 & 0.9\\0.9 & 0.1\\0.9 & 0.1\end{pmatrix}.$$
-	      <p class="fragment">Solve for $\lambda$ with Baum-Welch algorithm.</p>
-	    </section>
-	    <section data-background-image="img/active.jpeg" data-background-opacity=".2">
-	      <h4>$\alpha$'s, $\beta$'s and MSE's</h4>
-	      <p>However, within a spatial 2D network, we further update the transition probabilities matrix $P$ for each node in the network (e.g a patch of land), at each time step, conditional on the states of the neighboring nodes.</p>
-	      <p class="fragment">These updates occur as newly introduced weights $\alpha$ and $\beta$, which are applied to the states $a \rightarrow a$ and $q \rightarrow a$ of the transition matrix $P$ for each node at each time step.</p>
-	    </section>
-	     <section>
-	       <h4>Wait!...the MSE's?</h4>
-	       <p>We run a Monte Carlo simulation to find the $(\alpha, \beta)$ pair that minimizes the mean squared error (MSE) of the fire density in our training dataset. For example, here are 25 such pairs and their corresponding MSE's:</p>
-	        <img src="img/mse.png" width="550px">
-	     </section>
-	     <section>
-	       <h4>Fitted Transition Probabilities</h4>
-	       <img src="img/fitted_transitions.png" width="600px">
-	       </section>
-	     <section  data-transition="fade-in">
-	       <h4>Results</h4>
-	       <p>$\alpha = 1, \beta = 10$: adjacent quiecents get more affected.</p>
-	       <img src="img/a1b1.gif" width="400px">
-	     </section>
-	     <section  data-transition="fade-in">
-	       <h4>Results</h4>
-	       <p>$\alpha = 2, \beta = 10$: active nodes and adjacent quiecents get more affected.</p>
-	       <img src="img/a2b1.gif" width="400px">
-	     </section>
-	     <section  data-transition="fade-in">
-	       <h4>Results</h4>
-	       <p>$\alpha = 2, \beta = 2$: active nodes and adjacent quiecents get more affected.</p>
-	       <img src="img/a2b2.gif" width="400px">
-	     </section>
-	     <section  data-transition="fade-in">
-	       <h4>Results</h4>
-	       <p>$\alpha = 1, \beta = 2$: best multipliers.</p>
-	       <img src="img/lores.gif" width="400px">&nbsp;<img src="img/a1b2.gif" width="400px">
-	       <p><small><i>(left: low resolution version of training data, right: the results)</i></small></p>
-	     </section>
-	     <section>
-	       <h4>Results</h4>
-	       <p>However, we still have a long way to go...</p>
-	       <img src="img/fireds.png" width="800px">
-	       </section>
-	  </section>
-	  <section>
-	    <section data-background-image="img/firetruck.jpeg" data-background-opacity=".2">
-	      <h4>Importance</h4>
-	      <p>If we can predict fire spread and magnitude from earlier remote sensed data:</p>
+	    <section data-background-image="img/agave.jpeg" data-background-opacity=".2">
+	      <h4>Methods</h4>
+	      <ol>
+ <li class="fragment">One species: <i>Agave Angustifolia.</i></li>
+ <li class="fragment">Two sites: Xochicalco and Tembembe.</li>
+ <li class="fragment">Seedling establishment experiment in February and April 2009.</li>
+<li class="fragment">Survival, growth and fecundity at the sites from May 2009-May 2010.</li>
+	    <li class="fragment">Germination experiment at the end of May 2010.</li>
+	    <li class="fragment">Stage-structure demographic analysis, statistics, and simulation!</li>
+	  </ol>
+	      </section>
+	    <section data-background-image="img/xochicalco.png" data-background-opacity=".2">
+	      <h4>Site 1: Xochicalco</h4>
 	      <ul>
-		<li class="fragment"> We can fight it with the appropriate response later.</li>
-		<li class="fragment"> We can investigate problem areas and come up with mitigation responses.</li>
-		<li class="fragment"> If we can modify the vegetation in order to prevent large escalations.</li>
-		<li class="fragment"> We can evacuate animal and human inhabitants before it is too late.</li>
+		<li class="fragment">Near the archeological site at 1,199 m high</li>
+			<li class="fragment">Warm and dry, summer rainfall</li>
+		<li class="fragment">Landuse: protected</li>
 		</ul>
 	    </section>
-	    <section data-background-image="img/amazon.jpeg" data-background-opacity=".3">
-	      <h2>Thank you!</h2>
+	    <section data-background-image="img/tembembe.png" data-background-opacity=".2">
+	      <h4>Site 2: Tembembe</h4>
+	      <ul>
+		<li class="fragment">Higher altitude</li>
+		<li class="fragment">Less warm and dry, with less summer rainfall</li>
+		<li class="fragment">Landuse: cattle grazing</li>
+		<li class="fragment">Study in cattle exclusion zone</li>
+		</ul>
 	    </section>
+	    
+	    <section data-background-image="img/plant.gif" data-background-opacity=".2">
+	      <h4>Alysha:</h4>
+	      <blockquote>
+		&ldquo; Lefkovitch matrix models use life stage or size-category rather than age as their classifying system. I imagine this is beneficial when age is difficult to determine or individuals may spend varying amounts of time within certain life stages. Are there other reasons that a life stage matrix model would be preferred over an age-structured one? &rdquo;
+		</blockquote>
+	    </section>
+	  </section>
+	  <section>
+	  <section data-background-image="img/map.png" data-background-opacity=".2">
+	    <h4>Seedling Establishment</h4>
+	     <img src="img/survival.png" width="500px">
+	  </section>
+	  <section data-background-image="img/density.jpg" data-background-opacity=".2">
+	    <h4>Ryan:</h4>
+		<blockquote> &ldquo; The authors state that 204 individual plants were found in a sample area of 5,094 $m^2$ in Xochicalco and 215 individual plants were found in a sample area of 8,726 $m^2$ in Tembembe. Could the difference in population density be responsible for differences in seedling survival? How would we determine this? &rdquo; </blockquote>
+	    </section> 
+	   <section data-background-image="img/map.png" data-background-opacity=".2">
+	     <h4>Stage-structure Population Growth Analysis</h4>
+	     <img src="img/transmatrix.png" width="500px">
+	   </section>
+	   <section data-background-image="img/map.png" data-background-opacity=".2">
+	     <h4>Stage-structure Population Growth Analysis</h4>
+	     <img src="img/sizestruct.png" width="500px">
+	   </section>
+	   <section data-background-image="img/cactus.jpg" data-background-opacity=".2">
+	      <h4>Matt:</h4>
+	      <blockquote> &ldquo; Can population matrices be effective for plant species that reproduce extremely slowly or irregularly? Desert plants may only bloom once every 20 or so years depending on environmental conditions. Is this matrix model the appropriate tool when stage transition due to environmental variability is high? &rdquo; </blockquote>
+	    </section>
+	     <section data-background-image="img/map.png" data-background-opacity=".2">
+	       <h4>Elasticity</h4>
+	       <img src="img/elasticity.png" width="500px">
+	       <p>(relative contribution of each transition to the growth rate $\lambda$)</p>
+	     </section>
+	      <section data-background-image="img/map.png" data-background-opacity=".2">
+		<h4>Numerical Exercises</h4>
+		<img src="img/sim.png" width="500px">
+		<p>(using Tembembe matrix)</p>
+	      </section>
+	      <section data-background-image="img/dna.gif" data-background-opacity=".2">
+		<h4>Alexia:</h4>
+		<blockquote> &ldquo; How would genetic variation be maintained in areas where the locals are utilizing the plants, knowing that mast seeding years for agave are not annual? &rdquo; </blockquote>
+	      </section>
+	  </section>
+	  <section>
+	  <section data-background-image="img/morelos.jpg" data-background-opacity=".1">
+	    <h4>Discussion</h4>
+	    <ul>
+	      <li class="fragment">No significant variance in population growth rate between sites, but higher $\lambda$ for Xochicalco.</li>
+	      <li class="fragment">Greater seed germination and establishment probabilities in Tembembe hypothetically due to lower temperatures.</li>
+	      <li class="fragment">Seedlings are difficult to observe, but other stage projections are closer to observed.</li>
+	      <li class="fragment">Stasis and growth were the most important demographic processes (increase/decrease resp. in Tembembe and conversly in Xochicalco).</li>
+	      </ul>
+	  </section>
+	   <section data-background-image="img/morelos.jpg" data-background-opacity=".1">
+	    <ul>
+	      <li class="fragment">Germination and seedling establishment were lower in Xochicalco.</li>
+	      <li class="fragment">Seed production low during 2009-2010, not a mast-seeding year.</li>
+	       <li class="fragment">$\lambda$ increases with seedling introduction.</li>
+	      <li class="fragment">$\lambda$ below 1 only if all inflorescences are removed: so mezcal is go!</li>
+	      </ul>
+	   </section>
+	   <section  data-background-image="img/mezcal.jpeg" data-background-opacity=".3">
+	     <h4>The End</h4>
+	     </section>
 	    </section>
       </div>
     </div>
